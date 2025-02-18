@@ -6,7 +6,7 @@ Thank you for considering contributing to this project! We welcome all contribut
 1. Fork the repository: Click the "Fork" button at the top right of the GitHub repository.
 2. Clone your fork:
 ```
-git clone https://github.com/omnistrate-oss/omnistrate-sdk-go.git
+git clone https://github.com/omnistrate-oss/omnistrate-licensing-sdk-go.git
 cd repository-name
 ```
 3. Create a branch: Create a new branch for every change you make. Use a descriptive branch name:
@@ -43,4 +43,4 @@ git merge origin/main
 - Commit often: It’s easier to review small, incremental changes rather than large chunks of code at once.
 
 ## Issues
-Feel free to report bugs or suggest features by opening a new [issue](https://github.com/omnistrate-oss/omnistrate-sdk-go/issues). Before submitting, check if the issue already exists. If so, feel free to comment on it.
+Feel free to report bugs or suggest features by opening a new [issue](https://github.com/omnistrate-oss/omnistrate-licensing-sdk-go/issues). Before submitting, check if the issue already exists. If so, feel free to comment on it.
