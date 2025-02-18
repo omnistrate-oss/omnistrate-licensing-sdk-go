@@ -15,11 +15,17 @@ type ValidationOptions struct {
 }
 
 func ValidateLicense() (err error) {
-	return ValidateLicenseWithOptions(&ValidationOptions{})
+	return ValidateLicenseWithOptions(ValidationOptions{})
+}
+
+func ValidateLicenseForProduct(sku string) (err error) {
+	return ValidateLicenseWithOptions(ValidationOptions{
+		SKU: sku,
+	})
 }
 
 func ValidateLicenseWithOptions(
-	options *ValidationOptions,
+	options ValidationOptions,
 ) (err error) {
 	config := NewValidatorConfigFromEnv()
 
@@ -54,8 +60,8 @@ func ValidateLicenseWithOptions(
 	}
 
 	sku := options.SKU
-	instanceID := config.InstanceID
-	if options.InstanceID != "" {
+	instanceID := options.InstanceID
+	if options.InstanceID == "" {
 		instanceID = config.InstanceID
 	}
 

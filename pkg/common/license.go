@@ -46,16 +46,16 @@ func (l *License) IsValid(sku, instanceID string) error {
 		return errors.New("missing required fields")
 	}
 	if sku != "" && l.SKU != sku {
-		return fmt.Errorf("invalid SKU: %s", l.SKU)
+		return fmt.Errorf("invalid sku %s, expected %s", sku, l.SKU)
 	}
 	if instanceID != "" && l.InstanceID != instanceID {
-		return fmt.Errorf("invalid InstanceId: %s", l.InstanceID)
+		return fmt.Errorf("invalid instance id: %s, expected %s", instanceID, l.InstanceID)
 	}
 	if _, err := l.GetCreationTime(); err != nil {
-		return errors.Wrap(err, "invalid CreationTime")
+		return errors.Wrap(err, "invalid creation time")
 	}
 	if _, err := l.GetExpirationTime(); err != nil {
-		return errors.Wrap(err, "invalid ExpirationTime")
+		return errors.Wrap(err, "invalid expiration time")
 	}
 	return nil
 }
