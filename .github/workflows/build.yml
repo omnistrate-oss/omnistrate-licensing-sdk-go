@@ -1,0 +1,88 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ] 
+  merge_group:
+    branches: [ "main" ]
+
+env:  
+  GOMAXPROCS: 2
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+              
+      - name: Set up go
+        timeout-minutes: 10
+        uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5
+        with:
+          go-version-file: 'go.mod'
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Get dependencies
+        timeout-minutes: 10
+        run: | 
+          make download
+
+      - name: Build
+        timeout-minutes: 10
+        run: make build
+
+      - name: Build
+        timeout-minutes: 10
+        run: make unit-test
+     
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+              
+      - name: Set up go
+        timeout-minutes: 10
+        uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5
+        with:
+          go-version-file: 'go.mod'
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Get dependencies
+        timeout-minutes: 10
+        run: | 
+          make download
+
+      - name: Build
+        timeout-minutes: 10
+        run: make lint
+
+  publish:
+    if: github.event_name == 'push'
+    needs: [build, lint]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: Publish-'${{ github.workflow }}'
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+        
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@a22cf08638b34d5badda920f9daf6e72c477b07b # v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
+

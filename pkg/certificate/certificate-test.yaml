@@ -1,0 +1,33 @@
+## Example Certificate CRD - used to generate the TLS certificate used for testing
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    omnistrate.com/managed-by: omnistrate
+  name: licensing-test
+  namespace: bootstrap
+spec:
+  subject:
+    organizations:
+      - omnistrate
+  isCA: false
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  privateKey:
+    rotationPolicy: Always
+    algorithm: RSA # we are using RSA here
+    encoding: PKCS1
+    size: 2048
+  dnsNames:
+  - licensing-test.omnistrate.dev
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-omni-prod
+  secretName: licensing-test-tls
+  secretTemplate:
+    labels: 
+      omnistrate.com/managed-by: omnistrate
+  usages:
+  - digital signature
+  - key encipherment

@@ -1,0 +1,45 @@
+# Options for analysis running.
+run:
+  concurrency: 4
+  timeout: 10m
+  tests: true
+issues:
+  exclude-dirs:
+    - gen
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - bodyclose
+    - predeclared
+    - gosec
+    - bidichk
+    - containedctx
+    - asciicheck
+    - bodyclose
+    - durationcheck
+    - gocritic
+    - loggercheck
+    - unconvert
+    - contextcheck
+    - gosmopolitan
+    - makezero
+    - mirror
+    - nilerr
+    - noctx
+    - revive
+
+linters-settings:
+  gocritic:
+    disabled-checks:
+      - singleCaseSwitch
+      - assignOp
+      - ifElseChain
+  revive:
+    rules:
+      - name: unused-parameter
+        disabled: true
