@@ -1,7 +1,7 @@
 # Omnistrate Licensing SDK for Go
 
-![CI](https://github.com/pberton/omnistrate-licensing-sdk-go/actions/workflows/ci.yml/badge.svg)
-![CD](https://github.com/pberton/omnistrate-licensing-sdk-go/actions/workflows/cd.yml/badge.svg)
+![CI](https://github.com/omnistrate-oss/omnistrate-licensing-sdk-go/actions/workflows/build.yml/badge.svg) 
+![CodeQL](https://github.com/omnistrate-oss/omnistrate-licensing-sdk-go/actions/workflows/codeql.yml/badge.svg)
 
 ## Overview
 
