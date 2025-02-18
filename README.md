@@ -1,5 +1,7 @@
-# Go SDK for Omnistrate Licensing
-GoLang SDK for Omnistrate Licensing
+# Omnistrate Licensing SDK for Go
+
+![CI](https://github.com/pberton/omnistrate-licensing-sdk-go/actions/workflows/ci.yml/badge.svg)
+![CD](https://github.com/pberton/omnistrate-licensing-sdk-go/actions/workflows/cd.yml/badge.svg)
 
 ## Overview
 
