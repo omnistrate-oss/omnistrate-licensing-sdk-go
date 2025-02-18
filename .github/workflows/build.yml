@@ -63,9 +63,14 @@ jobs:
         run: | 
           make download
 
-      - name: Build
-        timeout-minutes: 10
-        run: make lint
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@2226d7cb06a077cd73e56eedd38eecad18e5d837
+        with:
+          version: ${{ env.GOLANG_CI_VERSION }}
+          args: ./... --timeout=10m
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          skip-cache: true
+          only-new-issues: false
 
   publish:
     if: github.event_name == 'push'
