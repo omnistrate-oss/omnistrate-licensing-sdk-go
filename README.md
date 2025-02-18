@@ -11,9 +11,9 @@
 
 ### Pre requisites
 
-The `Licensing` feature needs to be enable for the service plan. When enabling the feature a product identifier can be optionally configured. That value can then be optionally used to Validate the license. 
+The `Licensing` feature needs to be enabled for the service plan. When enabling the feature a product identifier can be optionally configured. That value can then be optionally used to Validate the license. 
 
-When used on an a Container based resource, Omnistrate takes care of mounting the secret and setting the environment variables for verification. 
+When used on a Container based resource, Omnistrate takes care of mounting the secret and setting the environment variables for verification. 
 
 When using Helm or Operator the secret `service-plan-subscription-license` generated with the license needs to be mounted on `/var/subscription/`
 
