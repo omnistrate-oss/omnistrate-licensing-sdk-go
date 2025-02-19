@@ -55,7 +55,7 @@ func ValidateLicenseWithOptions(
 
 	if !options.SkipCertificateValidation {
 		certificateDomain := options.CertificateDomain
-		if options.CertificateDomain == "" {
+		if certificateDomain == "" {
 			certificateDomain = signingCertificateValidDnsName
 		}
 
