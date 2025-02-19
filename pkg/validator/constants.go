@@ -8,5 +8,5 @@ const (
 	defaultValidatorCertPath    = "/var/subscription/license.crt"
 	defaultValidatorLicensePath = "/var/subscription/license.lic"
 
-	validDnsName = "licensing.omnistrate.cloud"
+	signingCertificateValidDnsName = "licensing.omnistrate.cloud"
 )

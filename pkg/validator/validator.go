@@ -15,7 +15,7 @@ type ValidatorInterface interface {
 	ValidateLicenseString(envelopeJson string, sku, instanceID string, currentTime time.Time) error
 	ValidateLicenseBytes(envelopeBytes []byte, sku, instanceID string, currentTime time.Time) error
 	ValidateLicenseBase64(envelopeBase64 string, sku, instanceID string, currentTime time.Time) error
-	ValidateCertificate(currentTime time.Time) error
+	ValidateCertificate(certificateDomain string, currentTime time.Time) error
 }
 
 type Validator struct {
@@ -125,11 +125,11 @@ func (m *Validator) ValidateLicenseBytes(envelopeBytes []byte, sku, instanceID s
 	return m.ValidateLicense(envelope, sku, instanceID, currentTime)
 }
 
-func (m *Validator) ValidateCertificate(currentTime time.Time) error {
+func (m *Validator) ValidateCertificate(certificateDomain string, currentTime time.Time) error {
 	if m.cert == nil {
 		return fmt.Errorf("signingCertificate is required to validate a certificate")
 	}
 
 	// Validate the certificate
-	return certificate.VerifyCertificate(m.cert, validDnsName, currentTime)
+	return certificate.VerifyCertificate(m.cert, certificateDomain, currentTime)
 }
