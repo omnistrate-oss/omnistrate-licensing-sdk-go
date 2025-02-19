@@ -7,6 +7,7 @@ import (
 
 type ValidationOptions struct {
 	SkipCertificateValidation bool
+	CertificateDomain         string
 	CurrentTime               time.Time
 	CertPath                  string
 	LicensePath               string
@@ -53,7 +54,12 @@ func ValidateLicenseWithOptions(
 	}
 
 	if !options.SkipCertificateValidation {
-		err = validator.ValidateCertificate(currentTime)
+		certificateDomain := options.CertificateDomain
+		if options.CertificateDomain == "" {
+			certificateDomain = signingCertificateValidDnsName
+		}
+
+		err = validator.ValidateCertificate(certificateDomain, currentTime)
 		if err != nil {
 			return
 		}
