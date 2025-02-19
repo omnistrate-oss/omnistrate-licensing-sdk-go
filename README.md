@@ -48,7 +48,7 @@ import (
 )
 
 func main() {
-	err := validator.ValidateLicenseForProduct("license.crt", "license.lic", "product-id", "instance-jzxo986k2")
+	err := validator.ValidateLicenseForProduct("product-id")
 	if err != nil {
 		fmt.Println("License validation for product failed:", err)
 	} else {
