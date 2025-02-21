@@ -70,7 +70,7 @@ import (
 )
 
 func main() {
-	err := validator.ValidateLicenseForProduct("product-id")
+	err := validator.ValidateLicenseForProduct("[SKU]")
 	if err != nil {
 		fmt.Println("License validation for product failed:", err)
 	} else {
