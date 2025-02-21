@@ -26,9 +26,9 @@ When used on a Container based resource, Omnistrate takes care of mounting the s
 Service spec configuration:
 ```yaml
 features:
-    licensing:
-		licenseExpirationInDays: 7 # optional - defaults to 7 days
-		productTierSku: '[SKU]' # optional - identifier (shared secret) that can be used to add extra security on validation
+  licensing:
+    licenseExpirationInDays: 7 # optional - defaults to 7 days
+    productTierSku: '[SKU]' # optional - identifier (shared secret) that can be used to add extra security on validation
 
 ```
 
