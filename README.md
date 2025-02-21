@@ -13,11 +13,31 @@
 
 The `Licensing` feature needs to be enabled for the service plan. When enabling the feature a product identifier can be optionally configured. That value can then be optionally used to Validate the license. 
 
+Docker compose example: 
+```yaml
+x-customer-integrations:
+  licensing: 
+    licenseExpirationInDays: 7 # optional - defaults to 7 days
+    productTierSku: '[SKU]' # optional - identifier (shared secret) that can be used to add extra security on validation
+```
+
 When used on a Container based resource, Omnistrate takes care of mounting the secret and setting the environment variables for verification. 
+
+Service spec configuration:
+```yaml
+features:
+    licensing:
+		licenseExpirationInDays: 7 # optional - defaults to 7 days
+		productTierSku: '[SKU]' # optional - identifier (shared secret) that can be used to add extra security on validation
+
+```
 
 When using Helm or Operator the secret `service-plan-subscription-license` generated with the license needs to be mounted on `/var/subscription/`
 
+
 ### ValidateLicense
+
+The validation of the license can be done on startup or periodically and does not require connection to external services to execute. 
 
 ```go
 package main
@@ -38,6 +58,8 @@ func main() {
 ```
 
 ### ValidateLicenseForProduct
+
+Alternatively, if a value is set for the `productTierSku` field, this method can be used to add extra security, ensuring the license has the same shared secret. 
 
 ```go
 package main
