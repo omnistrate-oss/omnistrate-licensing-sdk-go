@@ -43,12 +43,7 @@ When using Helm or Operator the secret `service-plan-subscription-license` gener
 
 ## Usage
 
-Import the SDK into your GoLang project:
-```go
-import "github.com/omnistrate/licensing-sdk-go"
-```
-
-Use one of the following options
+During startup and periodically, implement one of the following options:
 	
 ### a. ValidateLicense
 
