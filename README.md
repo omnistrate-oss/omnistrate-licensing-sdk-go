@@ -25,7 +25,7 @@ Docker compose example:
 x-customer-integrations:
   licensing: 
     licenseExpirationInDays: 7 # optional - defaults to 7 days
-    productTierSku: '[SKU]' # optional - identifier (shared secret) that can be used to add extra security on validation
+    productTierSku: '[product plan unique id]' # optional - identifier (shared secret) that can be used to add extra security on validation
 ```
 
 When used on a Container based resource, Omnistrate takes care of mounting the secret and setting the environment variables for verification. 
@@ -35,7 +35,7 @@ Service spec configuration:
 features:
   licensing:
     licenseExpirationInDays: 7 # optional - defaults to 7 days
-    productTierSku: '[SKU]' # optional - identifier (shared secret) that can be used to add extra security on validation
+    productTierSku: '[product plan unique id]' # optional - identifier (shared secret) that can be used to add extra security on validation
 
 ```
 
@@ -80,7 +80,7 @@ import (
 )
 
 func main() {
-	err := validator.ValidateLicenseForProduct("[SKU]") // [SKU]  value is hardcoded, based on the value configured when enabling the feature
+	err := validator.ValidateLicenseForProduct("[product plan unique id]")  value should be hardcoded, based on the value configured when enabling the feature
 	if err != nil {
 		fmt.Println("License validation for product failed:", err)
 	} else {
