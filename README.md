@@ -80,7 +80,7 @@ import (
 )
 
 func main() {
-	err := validator.ValidateLicenseForProduct("[product plan unique id]")
+	err := validator.ValidateLicenseForProduct("[product plan unique id]")  value should be hardcoded, based on the value configured when enabling the feature
 	if err != nil {
 		fmt.Println("License validation for product failed:", err)
 	} else {
