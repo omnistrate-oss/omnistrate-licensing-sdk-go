@@ -18,7 +18,7 @@ git checkout -b feature/your-feature-name
 1. Ensure each change is isolated in its own branch.
 2. Use clear, descriptive commit messages for every change. For example:
 "Fix bug in user login" or "Add feature to export user data"
-3. Make sure your code follows the project’s coding style and is properly documented.
+3. Make sure your code follows the project's coding style and is properly documented.
 
 ## Submitting a Pull Request
 1. Ensure your branch is up to date with the main branch:
