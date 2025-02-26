@@ -43,6 +43,15 @@ func TestManager_ValidateLicense(t *testing.T) {
 
 	err = validator.ValidateLicense(envelope, "orgId", "SKU", "instance-1", now)
 	assert.NoError(t, err)
+
+	err = validator.ValidateLicense(envelope, "INVALID", "SKU", "instance-1", now)
+	assert.Error(t, err)
+
+	err = validator.ValidateLicense(envelope, "orgId", "INVALID", "instance-1", now)
+	assert.Error(t, err)
+
+	err = validator.ValidateLicense(envelope, "orgId", "SKU", "INVALID", now)
+	assert.Error(t, err)
 }
 
 func TestManager_ValidateLicenseBase64(t *testing.T) {
@@ -71,6 +80,15 @@ func TestManager_ValidateLicenseBase64(t *testing.T) {
 
 	err = validator.ValidateLicense(decoded, "orgId", "SKU", "instance-1", now)
 	assert.NoError(t, err)
+
+	err = validator.ValidateLicense(decoded, "INVALID", "SKU", "instance-1", now)
+	assert.Error(t, err)
+
+	err = validator.ValidateLicense(decoded, "orgId", "INVALID", "instance-1", now)
+	assert.Error(t, err)
+
+	err = validator.ValidateLicense(decoded, "orgId", "SKU", "INVALID", now)
+	assert.Error(t, err)
 }
 
 func TestManager_ValidateLicense_Invalid(t *testing.T) {
