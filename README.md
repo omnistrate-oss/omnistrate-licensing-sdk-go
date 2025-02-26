@@ -24,8 +24,10 @@ Docker compose example:
 ```yaml
 x-customer-integrations:
   licensing: 
-    licenseExpirationInDays: 7 # optional - defaults to 7 days
-    productTierSku: '[product plan unique id]' # optional - identifier (shared secret) that can be used to add extra security on validation
+   	# optional - defaults to 7 days
+    licenseExpirationInDays: 7
+	# optional - identifier (shared secret) that can be used to add extra security on validation - defaults to product tier id
+    productPlanUniqueIdentifier: '[product plan unique id]' 
 ```
 
 When used on a Container based resource, Omnistrate takes care of mounting the secret and setting the environment variables for verification. 
@@ -34,8 +36,10 @@ Service spec configuration:
 ```yaml
 features:
   licensing:
-    licenseExpirationInDays: 7 # optional - defaults to 7 days
-    productTierSku: '[product plan unique id]' # optional - identifier (shared secret) that can be used to add extra security on validation
+  	# optional - defaults to 7 days
+    licenseExpirationInDays: 7 
+	 # optional - identifier (shared secret) that can be used to add extra security on validation - defaults to product tier id
+    productPlanUniqueIdentifier: '[product plan unique id]'
 
 ```
 
@@ -69,7 +73,7 @@ func main() {
 
 ### b. ValidateLicenseForProduct
 
-Alternatively, if a value is set for the `productTierSku` field, this method can be used to add extra security, ensuring the license has the same shared secret. 
+Alternatively, if a value is set for the `productPlanUniqueId` field, this method can be used to add extra security, ensuring the license was generated for the specific product plan. 
 
 ```go
 package main
