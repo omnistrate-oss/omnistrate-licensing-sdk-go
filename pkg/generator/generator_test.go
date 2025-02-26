@@ -32,7 +32,7 @@ func TestGenerator_GenerateLicense(t *testing.T) {
 	require.NoError(t, err)
 
 	expiration := time.Now().UTC().Add(48 * time.Hour)
-	envelope, err := manager.GenerateLicense("SKU", "instance-1", "subs-1", "product a", expiration)
+	envelope, err := manager.GenerateLicense("orgId", "SKU", "instance-1", "subs-1", "product a", expiration)
 	assert.NoError(t, err)
 	assert.NotNil(t, envelope)
 	assert.NotEmpty(t, envelope.Signature)
@@ -46,7 +46,7 @@ func TestGenerator_GenerateLicenseBase64(t *testing.T) {
 	manager, err := NewGeneratorFromBytes(keyPEM, certPEM)
 	require.NoError(t, err)
 
-	licenseBase64, err := manager.GenerateLicenseBase64("SKU", "instance-1", "subs-1", "product a", time.Now().UTC().Add(48*time.Hour))
+	licenseBase64, err := manager.GenerateLicenseBase64("orgId", "SKU", "instance-1", "subs-1", "product a", time.Now().UTC().Add(48*time.Hour))
 	assert.NoError(t, err)
 	assert.NotEmpty(t, licenseBase64)
 }
@@ -56,7 +56,7 @@ func TestGenerator_RenewLicense(t *testing.T) {
 	manager, err := NewGeneratorFromBytes(keyPEM, certPEM)
 	require.NoError(t, err)
 
-	envelope, err := manager.GenerateLicense("SKU", "instance-1", "subs-1", "product a", time.Now().UTC().Add(48*time.Hour))
+	envelope, err := manager.GenerateLicense("orgId", "SKU", "instance-1", "subs-1", "product a", time.Now().UTC().Add(48*time.Hour))
 	assert.NoError(t, err)
 	assert.NotNil(t, envelope)
 	oldExpirationTime, _ := envelope.License.GetExpirationTime()
@@ -76,7 +76,7 @@ func TestGenerator_RenewLicenseBase64(t *testing.T) {
 	manager, err := NewGeneratorFromBytes(keyPEM, certPEM)
 	require.NoError(t, err)
 
-	licenseBase64, err := manager.GenerateLicenseBase64("SKU", "instance-1", "subs-1", "product a", time.Now().UTC().Add(48*time.Hour))
+	licenseBase64, err := manager.GenerateLicenseBase64("orgId", "SKU", "instance-1", "subs-1", "product a", time.Now().UTC().Add(48*time.Hour))
 	assert.NoError(t, err)
 	assert.NotEmpty(t, licenseBase64)
 

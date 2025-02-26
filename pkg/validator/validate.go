@@ -11,17 +11,15 @@ type ValidationOptions struct {
 	CurrentTime               time.Time
 	CertPath                  string
 	LicensePath               string
-	SKU                       string
+	OrganizationID            string
+	ProductPlanUniqueID       string
 	InstanceID                string
 }
 
-func ValidateLicense() (err error) {
-	return ValidateLicenseWithOptions(ValidationOptions{})
-}
-
-func ValidateLicenseForProduct(sku string) (err error) {
+func ValidateLicenseForProduct(orgId, sku string) (err error) {
 	return ValidateLicenseWithOptions(ValidationOptions{
-		SKU: sku,
+		OrganizationID:      orgId,
+		ProductPlanUniqueID: sku,
 	})
 }
 
@@ -65,13 +63,12 @@ func ValidateLicenseWithOptions(
 		}
 	}
 
-	sku := options.SKU
 	instanceID := options.InstanceID
 	if options.InstanceID == "" {
 		instanceID = config.InstanceID
 	}
 
-	err = validator.ValidateLicenseBytes(licenseBytes, sku, instanceID, currentTime)
+	err = validator.ValidateLicenseBytes(licenseBytes, options.OrganizationID, options.ProductPlanUniqueID, instanceID, currentTime)
 	if err != nil {
 		return err
 	}

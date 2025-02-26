@@ -14,10 +14,11 @@ func TestNewLicense(t *testing.T) {
 
 	creationTime := time.Now().UTC()
 	expirationTime := creationTime.Add(24 * time.Hour)
-	license := NewLicense("SKU", "instance-id", "sub-id", "desc", creationTime, expirationTime)
+	license := NewLicense("org-id", "SKU", "instance-id", "sub-id", "desc", creationTime, expirationTime)
 
 	assert.NotEmpty(t, license.ID)
-	assert.Equal(t, "SKU", license.ProductPlanUniqueId)
+	assert.Equal(t, "org-id", license.OrganizationID)
+	assert.Equal(t, "SKU", license.ProductPlanUniqueID)
 	assert.Equal(t, "desc", license.Description)
 	assert.Equal(t, "sub-id", license.SubscriptionID)
 	assert.Equal(t, "instance-id", license.InstanceID)
@@ -82,70 +83,69 @@ func TestIsValid(t *testing.T) {
 		ExpirationTime: "2022-01-01T00:00:00Z",
 	}
 
-	err := validLicense.IsValid("", "")
+	err := validLicense.IsValid("", "", "")
 	assert.NoError(t, err)
 
-	err = invalidLicense.IsValid("", "")
+	err = invalidLicense.IsValid("", "", "")
 	assert.Error(t, err)
 }
 
-func TestIsValidWithSKU(t *testing.T) {
+func TestIsValidWithInstanceMissingId(t *testing.T) {
 	t.Parallel()
 
-	validLicense := License{
-		ID:                  "1234",
-		ProductPlanUniqueId: "SKU",
-		CreationTime:        "2021-01-01T00:00:00Z",
-		ExpirationTime:      "2022-01-01T00:00:00Z",
-	}
 	invalidLicense := License{
 		ID:                  "",
-		ProductPlanUniqueId: "SKU",
-		CreationTime:        "2021-01-01T00:00:00Z",
-		ExpirationTime:      "2022-01-01T00:00:00Z",
-	}
-
-	err := validLicense.IsValid("", "")
-	assert.NoError(t, err)
-
-	err = validLicense.IsValid("SKU", "")
-	assert.NoError(t, err)
-
-	err = validLicense.IsValid("INVALID", "")
-	assert.Error(t, err)
-
-	err = invalidLicense.IsValid("SKU", "")
-	assert.Error(t, err)
-}
-
-func TestIsValidWithInstanceID(t *testing.T) {
-	t.Parallel()
-
-	validLicense := License{
-		ID:                  "1234",
-		ProductPlanUniqueId: "SKU",
-		InstanceID:          "instance-id",
-		CreationTime:        "2021-01-01T00:00:00Z",
-		ExpirationTime:      "2022-01-01T00:00:00Z",
-	}
-	invalidLicense := License{
-		ID:                  "",
-		ProductPlanUniqueId: "SKU",
+		OrganizationID:      "org-id",
+		ProductPlanUniqueID: "SKU",
 		InstanceID:          "instance-id",
 		CreationTime:        "2021-01-01T00:00:00Z",
 		ExpirationTime:      "2022-01-01T00:00:00Z",
 	}
 
-	err := validLicense.IsValid("", "")
-	assert.NoError(t, err)
-
-	err = validLicense.IsValid("SKU", "instance-id")
-	assert.NoError(t, err)
-
-	err = invalidLicense.IsValid("SKU", "INVALID")
+	err := invalidLicense.IsValid("", "", "")
 	assert.Error(t, err)
 
-	err = invalidLicense.IsValid("SKU", "instance-id")
+	err = invalidLicense.IsValid("org-id", "SKU", "INVALID")
+	assert.Error(t, err)
+
+	err = invalidLicense.IsValid("org-id", "SKU", "instance-id")
+	assert.Error(t, err)
+}
+
+func TestIsValidWithInstanceProductPlanUniqueID(t *testing.T) {
+	t.Parallel()
+
+	validLicense := License{
+		ID:                  "1234",
+		OrganizationID:      "org-id",
+		ProductPlanUniqueID: "SKU",
+		InstanceID:          "instance-id",
+		CreationTime:        "2021-01-01T00:00:00Z",
+		ExpirationTime:      "2022-01-01T00:00:00Z",
+	}
+
+	err := validLicense.IsValid("", "", "")
+	assert.NoError(t, err)
+
+	err = validLicense.IsValid("", "SKU", "instance-id")
+	assert.NoError(t, err)
+
+	err = validLicense.IsValid("org-id", "SKU", "instance-id")
+	assert.NoError(t, err)
+
+	err = validLicense.IsValid("org-id", "", "instance-id")
+	assert.NoError(t, err)
+
+	err = validLicense.IsValid("org-id", "SKU", "")
+	assert.NoError(t, err)
+
+	err = validLicense.IsValid("org-id", "SKU", "INVALID")
+	assert.Error(t, err)
+
+	err = validLicense.IsValid("org-id", "INVALID", "instance-id")
+	assert.Error(t, err)
+
+	err = validLicense.IsValid("INVALID", "SKU", "instance-id")
 	assert.Error(t, err)
 }
 

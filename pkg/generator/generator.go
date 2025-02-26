@@ -12,8 +12,8 @@ import (
 )
 
 type GeneratorInterface interface {
-	GenerateLicense(SKU, instanceId, subscriptionId, description string, expirationDate time.Time) (envelope *common.LicenseEnvelope, err error)
-	GenerateLicenseBase64(SKU, instanceId, subscriptionId, description string, expirationDate time.Time) (string, error)
+	GenerateLicense(orgId, productPlanUniqueID, instanceId, subscriptionId, description string, expirationDate time.Time) (envelope *common.LicenseEnvelope, err error)
+	GenerateLicenseBase64(orgId, productPlanUniqueID, instanceId, subscriptionId, description string, expirationDate time.Time) (string, error)
 	RenewLicense(envelope *common.LicenseEnvelope, expirationDate time.Time) (newEnvelope *common.LicenseEnvelope, err error)
 	RenewLicenseBase64(envelopeBase64 string, expirationDate time.Time) (string, error)
 	GetPublicCertificateBase64() string
@@ -68,7 +68,8 @@ func (m *Manager) GetPublicCertificateBase64() string {
 }
 
 func (m *Manager) GenerateLicense(
-	sku string,
+	orgId string,
+	productPlanUniqueID string,
 	instanceId string,
 	subscriptionId string,
 	description string,
@@ -82,7 +83,7 @@ func (m *Manager) GenerateLicense(
 	}
 
 	now := time.Now().UTC()
-	license := common.NewLicense(sku, instanceId, subscriptionId, description, now, expirationDate)
+	license := common.NewLicense(orgId, productPlanUniqueID, instanceId, subscriptionId, description, now, expirationDate)
 
 	// Sign with private key
 	licenseBytes, err := license.Bytes()
@@ -100,7 +101,8 @@ func (m *Manager) GenerateLicense(
 }
 
 func (m *Manager) GenerateLicenseBase64(
-	sku string,
+	orgId string,
+	productPlanUniqueID string,
 	instanceId string,
 	subscriptionId string,
 	description string,
@@ -109,7 +111,7 @@ func (m *Manager) GenerateLicenseBase64(
 	string,
 	error,
 ) {
-	envelope, err := m.GenerateLicense(sku, instanceId, subscriptionId, description, expirationDate)
+	envelope, err := m.GenerateLicense(orgId, productPlanUniqueID, instanceId, subscriptionId, description, expirationDate)
 	if err != nil {
 		return "", err
 	}

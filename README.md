@@ -47,33 +47,11 @@ When using Helm or Operator the secret `service-plan-subscription-license` gener
 
 ## Usage
 
-During startup and periodically, implement one of the following options:
-	
-### a. ValidateLicense
+During startup and periodically, implement the following check:
 
-The validation of the license can be done on startup or periodically and does not require connection to external services to execute. 
+### ValidateLicenseForProduct
 
-```go
-package main
-
-import (
-	"fmt"
-	"github.com/omnistrate-oss/omnistrate-licensing-sdk-go/pkg/validator"
-)
-
-func main() {
-	err := validator.ValidateLicense()
-	if err != nil {
-		fmt.Println("License validation failed:", err)
-	} else {
-		fmt.Println("License validation succeeded")
-	}
-}
-```
-
-### b. ValidateLicenseForProduct
-
-Alternatively, if a value is set for the `productPlanUniqueId` field, this method can be used to add extra security, ensuring the license was generated for the specific product plan. 
+Alternatively, if a value is set for the `productPlanUniqueIdentifier` field, this method can be used to add extra security, ensuring the license was generated for the specific product plan. 
 
 ```go
 package main
@@ -84,7 +62,7 @@ import (
 )
 
 func main() {
-	err := validator.ValidateLicenseForProduct("[product plan unique id]")  value should be hardcoded, based on the value configured when enabling the feature
+	err := validator.ValidateLicenseForProduct("[org-id]", "[product plan unique id]")  value should be hardcoded, based on the value configured when enabling the feature
 	if err != nil {
 		fmt.Println("License validation for product failed:", err)
 	} else {
