@@ -49,7 +49,7 @@ When using Helm or Operator the secret `service-plan-subscription-license` gener
 
 During startup and periodically, implement the following check:
 
-### ValidateLicense
+### Validate License
 
 Alternatively, if a value is set for the `productPlanUniqueIdentifier` field, this method can be used to add extra security, ensuring the license was generated for the specific product plan. 
 
