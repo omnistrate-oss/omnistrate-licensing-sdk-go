@@ -11,10 +11,10 @@ import (
 )
 
 type ValidatorInterface interface {
-	ValidateLicense(envelope *common.LicenseEnvelope, sku, instanceID string, currentTime time.Time) error
-	ValidateLicenseString(envelopeJson string, sku, instanceID string, currentTime time.Time) error
-	ValidateLicenseBytes(envelopeBytes []byte, sku, instanceID string, currentTime time.Time) error
-	ValidateLicenseBase64(envelopeBase64 string, sku, instanceID string, currentTime time.Time) error
+	ValidateLicense(envelope *common.LicenseEnvelope, orgId, productPlanUniqueID, instanceID string, currentTime time.Time) error
+	ValidateLicenseString(envelopeJson string, orgId, productPlanUniqueID, instanceID string, currentTime time.Time) error
+	ValidateLicenseBytes(envelopeBytes []byte, orgId, productPlanUniqueID, instanceID string, currentTime time.Time) error
+	ValidateLicenseBase64(envelopeBase64 string, orgId, productPlanUniqueID, instanceID string, currentTime time.Time) error
 	ValidateCertificate(certificateDomain string, currentTime time.Time) error
 }
 
@@ -48,7 +48,7 @@ func NewValidatorFromConfig(config *ValidatorConfig) (ValidatorInterface, error)
 	return NewValidatorFromFiles(config.CertPath)
 }
 
-func (m *Validator) ValidateLicense(envelope *common.LicenseEnvelope, sku, instanceID string, currentTime time.Time) error {
+func (m *Validator) ValidateLicense(envelope *common.LicenseEnvelope, orgId, productPlanUniqueID, instanceID string, currentTime time.Time) error {
 	if m.cert == nil {
 		return fmt.Errorf("signingCertificate is required to validate a license")
 	}
@@ -72,7 +72,7 @@ func (m *Validator) ValidateLicense(envelope *common.LicenseEnvelope, sku, insta
 	}
 
 	// Check if the license is valid
-	err = license.IsValid(sku, instanceID)
+	err = license.IsValid(orgId, productPlanUniqueID, instanceID)
 	if err != nil {
 		return errors.Wrap(err, "license is invalid")
 	}
@@ -92,7 +92,7 @@ func (m *Validator) ValidateLicense(envelope *common.LicenseEnvelope, sku, insta
 	return nil
 }
 
-func (m *Validator) ValidateLicenseBase64(envelopeBase64 string, sku, instanceID string, currentTime time.Time) error {
+func (m *Validator) ValidateLicenseBase64(envelopeBase64 string, orgId, productPlanUniqueID, instanceID string, currentTime time.Time) error {
 	// Decode the license envelope
 	envelope, err := common.DecodeLicenseEnvelopeFromBase64(envelopeBase64)
 	if err != nil {
@@ -100,10 +100,10 @@ func (m *Validator) ValidateLicenseBase64(envelopeBase64 string, sku, instanceID
 	}
 
 	// Validate the license
-	return m.ValidateLicense(envelope, sku, instanceID, currentTime)
+	return m.ValidateLicense(envelope, orgId, productPlanUniqueID, instanceID, currentTime)
 }
 
-func (m *Validator) ValidateLicenseString(envelopeJson string, sku, instanceID string, currentTime time.Time) error {
+func (m *Validator) ValidateLicenseString(envelopeJson string, orgId, productPlanUniqueID, instanceID string, currentTime time.Time) error {
 	// Decode the license envelope
 	envelope, err := common.DecodeLicenseEnvelopeFromString(envelopeJson)
 	if err != nil {
@@ -111,10 +111,10 @@ func (m *Validator) ValidateLicenseString(envelopeJson string, sku, instanceID s
 	}
 
 	// Validate the license
-	return m.ValidateLicense(envelope, sku, instanceID, currentTime)
+	return m.ValidateLicense(envelope, orgId, productPlanUniqueID, instanceID, currentTime)
 }
 
-func (m *Validator) ValidateLicenseBytes(envelopeBytes []byte, sku, instanceID string, currentTime time.Time) error {
+func (m *Validator) ValidateLicenseBytes(envelopeBytes []byte, orgId, productPlanUniqueID, instanceID string, currentTime time.Time) error {
 	// Decode the license envelope
 	envelope, err := common.DecodeLicenseEnvelopeFromBytes(envelopeBytes)
 	if err != nil {
@@ -122,7 +122,7 @@ func (m *Validator) ValidateLicenseBytes(envelopeBytes []byte, sku, instanceID s
 	}
 
 	// Validate the license
-	return m.ValidateLicense(envelope, sku, instanceID, currentTime)
+	return m.ValidateLicense(envelope, orgId, productPlanUniqueID, instanceID, currentTime)
 }
 
 func (m *Validator) ValidateCertificate(certificateDomain string, currentTime time.Time) error {

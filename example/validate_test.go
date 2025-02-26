@@ -12,7 +12,7 @@ import (
 // from the validator package.
 
 // The test function uses options to ensure the certificate validation is skipped and old time is set
-// In production code, ValidateLicense or ValidateLicenseForProduct can be used instead of ValidateLicenseWithOptions
+// In production code, ValidateLicense or ValidateLicense can be used instead of ValidateLicenseWithOptions
 func TestValidateExample(t *testing.T) {
 	require := require.New(t)
 

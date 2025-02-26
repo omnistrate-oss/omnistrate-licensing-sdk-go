@@ -16,11 +16,12 @@ type License struct {
 	Description         string `json:"Description,omitempty"`
 	InstanceID          string `json:"InstanceID,omitempty"`
 	SubscriptionID      string `json:"SubscriptionID,omitempty"`
-	ProductPlanUniqueId string `json:"ProductPlanUniqueId,omitempty"`
+	ProductPlanUniqueID string `json:"ProductPlanUniqueID,omitempty"`
+	OrganizationID      string `json:"OrganizationID,omitempty"`
 	Version             uint64 `json:"Version,omitempty"`
 }
 
-func NewLicense(productPlanUniqueId, instanceID, subscriptionID, description string, creationTime, expirationTime time.Time) *License {
+func NewLicense(orgID, productPlanUniqueID, instanceID, subscriptionID, description string, creationTime, expirationTime time.Time) *License {
 	return &License{
 		ID:                  uuid.NewString(),
 		CreationTime:        creationTime.UTC().Format(time.RFC3339),
@@ -28,7 +29,8 @@ func NewLicense(productPlanUniqueId, instanceID, subscriptionID, description str
 		InstanceID:          instanceID,
 		SubscriptionID:      subscriptionID,
 		Description:         description,
-		ProductPlanUniqueId: productPlanUniqueId,
+		ProductPlanUniqueID: productPlanUniqueID,
+		OrganizationID:      orgID,
 		Version:             1,
 	}
 }
@@ -41,12 +43,15 @@ func (l *License) GetCreationTime() (time.Time, error) {
 	return time.Parse(time.RFC3339, l.CreationTime)
 }
 
-func (l *License) IsValid(productPlanUniqueId, instanceID string) error {
+func (l *License) IsValid(orgID, productPlanUniqueID, instanceID string) error {
 	if l.ID == "" || l.CreationTime == "" || l.ExpirationTime == "" {
 		return errors.New("missing required fields")
 	}
-	if productPlanUniqueId != "" && l.ProductPlanUniqueId != productPlanUniqueId {
-		return fmt.Errorf("invalid product unique id %s, expected %s", productPlanUniqueId, l.ProductPlanUniqueId)
+	if orgID != "" && l.OrganizationID != orgID {
+		return fmt.Errorf("invalid organization id %s, expected %s", orgID, l.OrganizationID)
+	}
+	if productPlanUniqueID != "" && l.ProductPlanUniqueID != productPlanUniqueID {
+		return fmt.Errorf("invalid product unique id %s, expected %s", productPlanUniqueID, l.ProductPlanUniqueID)
 	}
 	if instanceID != "" && l.InstanceID != instanceID {
 		return fmt.Errorf("invalid instance id: %s, expected %s", instanceID, l.InstanceID)

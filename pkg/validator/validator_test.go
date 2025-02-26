@@ -34,15 +34,24 @@ func TestManager_ValidateLicense(t *testing.T) {
 	manager, err := generator.NewGeneratorFromBytes(keyPEM, certPEM)
 	require.NoError(t, err)
 
-	envelope, err := manager.GenerateLicense("SKU", "instance-1", "subs-1", "product a", now.Add(48*time.Hour))
+	envelope, err := manager.GenerateLicense("orgId", "SKU", "instance-1", "subs-1", "product a", now.Add(48*time.Hour))
 	assert.NoError(t, err)
 	assert.NotNil(t, envelope)
 
 	validator, err := NewValidatorFromBytes(certPEM)
 	require.NoError(t, err)
 
-	err = validator.ValidateLicense(envelope, "SKU", "instance-1", now)
+	err = validator.ValidateLicense(envelope, "orgId", "SKU", "instance-1", now)
 	assert.NoError(t, err)
+
+	err = validator.ValidateLicense(envelope, "INVALID", "SKU", "instance-1", now)
+	assert.Error(t, err)
+
+	err = validator.ValidateLicense(envelope, "orgId", "INVALID", "instance-1", now)
+	assert.Error(t, err)
+
+	err = validator.ValidateLicense(envelope, "orgId", "SKU", "INVALID", now)
+	assert.Error(t, err)
 }
 
 func TestManager_ValidateLicenseBase64(t *testing.T) {
@@ -53,7 +62,7 @@ func TestManager_ValidateLicenseBase64(t *testing.T) {
 	manager, err := generator.NewGeneratorFromBytes(keyPEM, certPEM)
 	require.NoError(t, err)
 
-	license, err := manager.GenerateLicense("SKU", "instance-1", "subs-1", "product a", now.Add(48*time.Hour))
+	license, err := manager.GenerateLicense("orgId", "SKU", "instance-1", "subs-1", "product a", now.Add(48*time.Hour))
 	require.NoError(t, err)
 
 	licenseBase64 := license.String()
@@ -69,8 +78,17 @@ func TestManager_ValidateLicenseBase64(t *testing.T) {
 	validator, err := NewValidatorFromBytes(certPEM)
 	require.NoError(t, err)
 
-	err = validator.ValidateLicense(decoded, "SKU", "instance-1", now)
+	err = validator.ValidateLicense(decoded, "orgId", "SKU", "instance-1", now)
 	assert.NoError(t, err)
+
+	err = validator.ValidateLicense(decoded, "INVALID", "SKU", "instance-1", now)
+	assert.Error(t, err)
+
+	err = validator.ValidateLicense(decoded, "orgId", "INVALID", "instance-1", now)
+	assert.Error(t, err)
+
+	err = validator.ValidateLicense(decoded, "orgId", "SKU", "INVALID", now)
+	assert.Error(t, err)
 }
 
 func TestManager_ValidateLicense_Invalid(t *testing.T) {
@@ -90,6 +108,6 @@ func TestManager_ValidateLicense_Invalid(t *testing.T) {
 		Signature: []byte("invalid-signature"),
 	}
 
-	err = validator.ValidateLicense(invalidEnvelope, "", "", now)
+	err = validator.ValidateLicense(invalidEnvelope, "", "", "", now)
 	assert.Error(t, err)
 }
