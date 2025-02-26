@@ -49,7 +49,7 @@ When using Helm or Operator the secret `service-plan-subscription-license` gener
 
 During startup and periodically, implement the following check:
 
-### ValidateLicenseForProduct
+### ValidateLicense
 
 Alternatively, if a value is set for the `productPlanUniqueIdentifier` field, this method can be used to add extra security, ensuring the license was generated for the specific product plan. 
 
@@ -62,7 +62,7 @@ import (
 )
 
 func main() {
-	err := validator.ValidateLicenseForProduct("[org-id]", "[product plan unique id]")  value should be hardcoded, based on the value configured when enabling the feature
+	err := validator.ValidateLicense("[org-id]", "[product plan unique id]")  value should be hardcoded, based on the value configured when enabling the feature
 	if err != nil {
 		fmt.Println("License validation for product failed:", err)
 	} else {
