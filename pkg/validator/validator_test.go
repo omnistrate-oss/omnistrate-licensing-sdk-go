@@ -108,6 +108,6 @@ func TestManager_ValidateLicense_Invalid(t *testing.T) {
 		Signature: []byte("invalid-signature"),
 	}
 
-	err = validator.ValidateLicense(invalidEnvelope, "orgId", "", "", now)
+	err = validator.ValidateLicense(invalidEnvelope, "", "", "", now)
 	assert.Error(t, err)
 }
