@@ -7,8 +7,8 @@ import (
 )
 
 type LicenseEnvelope struct {
-	License   *License `json:"license"`
-	Signature []byte   `json:"signature"`
+	License   *License `json:"License"`
+	Signature []byte   `json:"Signature"`
 }
 
 func NewLicenseEnvelope(license *License, signature []byte) *LicenseEnvelope {

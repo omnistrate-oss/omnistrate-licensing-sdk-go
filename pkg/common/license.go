@@ -10,26 +10,26 @@ import (
 )
 
 type License struct {
-	ID             string `json:"ID,omitempty"`
-	CreationTime   string `json:"CreationTime,omitempty"`
-	ExpirationTime string `json:"ExpirationTime,omitempty"`
-	Description    string `json:"Description,omitempty"`
-	InstanceID     string `json:"InstanceID,omitempty"`
-	SubscriptionID string `json:"SubscriptionID,omitempty"`
-	SKU            string `json:"SKU,omitempty"`
-	Version        uint64 `json:"Version,omitempty"`
+	ID                  string `json:"ID,omitempty"`
+	CreationTime        string `json:"CreationTime,omitempty"`
+	ExpirationTime      string `json:"ExpirationTime,omitempty"`
+	Description         string `json:"Description,omitempty"`
+	InstanceID          string `json:"InstanceID,omitempty"`
+	SubscriptionID      string `json:"SubscriptionID,omitempty"`
+	ProductPlanUniqueId string `json:"ProductPlanUniqueId,omitempty"`
+	Version             uint64 `json:"Version,omitempty"`
 }
 
-func NewLicense(sku, instanceID, subscriptionID, description string, creationTime, expirationTime time.Time) *License {
+func NewLicense(productPlanUniqueId, instanceID, subscriptionID, description string, creationTime, expirationTime time.Time) *License {
 	return &License{
-		ID:             uuid.NewString(),
-		CreationTime:   creationTime.UTC().Format(time.RFC3339),
-		ExpirationTime: expirationTime.UTC().Format(time.RFC3339),
-		InstanceID:     instanceID,
-		SubscriptionID: subscriptionID,
-		Description:    description,
-		SKU:            sku,
-		Version:        1,
+		ID:                  uuid.NewString(),
+		CreationTime:        creationTime.UTC().Format(time.RFC3339),
+		ExpirationTime:      expirationTime.UTC().Format(time.RFC3339),
+		InstanceID:          instanceID,
+		SubscriptionID:      subscriptionID,
+		Description:         description,
+		ProductPlanUniqueId: productPlanUniqueId,
+		Version:             1,
 	}
 }
 
@@ -41,12 +41,12 @@ func (l *License) GetCreationTime() (time.Time, error) {
 	return time.Parse(time.RFC3339, l.CreationTime)
 }
 
-func (l *License) IsValid(sku, instanceID string) error {
+func (l *License) IsValid(productPlanUniqueId, instanceID string) error {
 	if l.ID == "" || l.CreationTime == "" || l.ExpirationTime == "" {
 		return errors.New("missing required fields")
 	}
-	if sku != "" && l.SKU != sku {
-		return fmt.Errorf("invalid sku %s, expected %s", sku, l.SKU)
+	if productPlanUniqueId != "" && l.ProductPlanUniqueId != productPlanUniqueId {
+		return fmt.Errorf("invalid product unique id %s, expected %s", productPlanUniqueId, l.ProductPlanUniqueId)
 	}
 	if instanceID != "" && l.InstanceID != instanceID {
 		return fmt.Errorf("invalid instance id: %s, expected %s", instanceID, l.InstanceID)

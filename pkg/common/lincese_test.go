@@ -17,7 +17,7 @@ func TestNewLicense(t *testing.T) {
 	license := NewLicense("SKU", "instance-id", "sub-id", "desc", creationTime, expirationTime)
 
 	assert.NotEmpty(t, license.ID)
-	assert.Equal(t, "SKU", license.SKU)
+	assert.Equal(t, "SKU", license.ProductPlanUniqueId)
 	assert.Equal(t, "desc", license.Description)
 	assert.Equal(t, "sub-id", license.SubscriptionID)
 	assert.Equal(t, "instance-id", license.InstanceID)
@@ -93,16 +93,16 @@ func TestIsValidWithSKU(t *testing.T) {
 	t.Parallel()
 
 	validLicense := License{
-		ID:             "1234",
-		SKU:            "SKU",
-		CreationTime:   "2021-01-01T00:00:00Z",
-		ExpirationTime: "2022-01-01T00:00:00Z",
+		ID:                  "1234",
+		ProductPlanUniqueId: "SKU",
+		CreationTime:        "2021-01-01T00:00:00Z",
+		ExpirationTime:      "2022-01-01T00:00:00Z",
 	}
 	invalidLicense := License{
-		ID:             "",
-		SKU:            "SKU",
-		CreationTime:   "2021-01-01T00:00:00Z",
-		ExpirationTime: "2022-01-01T00:00:00Z",
+		ID:                  "",
+		ProductPlanUniqueId: "SKU",
+		CreationTime:        "2021-01-01T00:00:00Z",
+		ExpirationTime:      "2022-01-01T00:00:00Z",
 	}
 
 	err := validLicense.IsValid("", "")
@@ -122,18 +122,18 @@ func TestIsValidWithInstanceID(t *testing.T) {
 	t.Parallel()
 
 	validLicense := License{
-		ID:             "1234",
-		SKU:            "SKU",
-		InstanceID:     "instance-id",
-		CreationTime:   "2021-01-01T00:00:00Z",
-		ExpirationTime: "2022-01-01T00:00:00Z",
+		ID:                  "1234",
+		ProductPlanUniqueId: "SKU",
+		InstanceID:          "instance-id",
+		CreationTime:        "2021-01-01T00:00:00Z",
+		ExpirationTime:      "2022-01-01T00:00:00Z",
 	}
 	invalidLicense := License{
-		ID:             "",
-		SKU:            "SKU",
-		InstanceID:     "instance-id",
-		CreationTime:   "2021-01-01T00:00:00Z",
-		ExpirationTime: "2022-01-01T00:00:00Z",
+		ID:                  "",
+		ProductPlanUniqueId: "SKU",
+		InstanceID:          "instance-id",
+		CreationTime:        "2021-01-01T00:00:00Z",
+		ExpirationTime:      "2022-01-01T00:00:00Z",
 	}
 
 	err := validLicense.IsValid("", "")
