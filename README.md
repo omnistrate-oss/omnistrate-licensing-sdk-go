@@ -45,6 +45,14 @@ features:
 
 When using Helm or Operator the secret `service-plan-subscription-license` generated with the license needs to be mounted on `/var/subscription/`
 
+### Get your Organization ID
+
+The Organization ID will be needed to ensure the license maps to products plans defined for your organization. We will that globally unique id in the validation process. 
+
+You can get you Organization ID from your user profile. 
+![Profile](./assets/profile.png)
+
+
 ## Usage
 
 During startup and periodically, implement the following check:
