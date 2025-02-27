@@ -16,7 +16,7 @@ type ValidationOptions struct {
 	InstanceID                string
 }
 
-func ValidateLicenseForProduct(orgId, sku string) (err error) {
+func ValidateLicense(orgId, sku string) (err error) {
 	return ValidateLicenseWithOptions(ValidationOptions{
 		OrganizationID:      orgId,
 		ProductPlanUniqueID: sku,
