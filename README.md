@@ -59,8 +59,6 @@ During startup and periodically, implement the following check:
 
 ### Validate License
 
-Alternatively, if a value is set for the `productPlanUniqueIdentifier` field, this method can be used to add extra security, ensuring the license was generated for the specific product plan. 
-
 ```go
 package main
 
@@ -70,7 +68,7 @@ import (
 )
 
 func main() {
-	err := validator.ValidateLicense("[org-id]", "[product plan unique id]")  value should be hardcoded, based on the value configured when enabling the feature
+	err := validator.ValidateLicense("[org-id]", "[product plan unique id]") // value should be hardcoded, based on the value configured when enabling the feature
 	if err != nil {
 		fmt.Println("License validation for product failed:", err)
 	} else {
