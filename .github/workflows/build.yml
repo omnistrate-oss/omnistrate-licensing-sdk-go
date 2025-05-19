@@ -64,13 +64,11 @@ jobs:
           make download
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@2226d7cb06a077cd73e56eedd38eecad18e5d837
+        uses: golangci/golangci-lint-action@9fae48acfc02a90574d7c304a1758ef9895495fa
         with:
-          version: ${{ env.GOLANG_CI_VERSION }}
-          args: ./... --timeout=10m
+          args: ./...
           github-token: ${{ secrets.GITHUB_TOKEN }}
           skip-cache: true
-          only-new-issues: false
 
   publish:
     if: github.event_name == 'push'

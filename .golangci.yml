@@ -1,45 +1,52 @@
-# Options for analysis running.
+version: "2"
 run:
   concurrency: 4
-  timeout: 10m
   tests: true
-issues:
-  exclude-dirs:
-    - gen
 linters:
   enable:
-    - errcheck
-    - gosimple
-    - govet
-    - ineffassign
-    - staticcheck
-    - unused
-    - bodyclose
-    - predeclared
-    - gosec
-    - bidichk
-    - containedctx
     - asciicheck
+    - bidichk
     - bodyclose
+    - containedctx
+    - contextcheck
     - durationcheck
     - gocritic
-    - loggercheck
-    - unconvert
-    - contextcheck
+    - gosec
     - gosmopolitan
+    - loggercheck
     - makezero
     - mirror
     - nilerr
     - noctx
+    - predeclared
     - revive
-
-linters-settings:
-  gocritic:
-    disabled-checks:
-      - singleCaseSwitch
-      - assignOp
-      - ifElseChain
-  revive:
-    rules:
-      - name: unused-parameter
-        disabled: true
+    - unconvert
+  settings:
+    gocritic:
+      disabled-checks:
+        - singleCaseSwitch
+        - assignOp
+        - ifElseChain
+    revive:
+      rules:
+        - name: unused-parameter
+          disabled: true
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - gen
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
