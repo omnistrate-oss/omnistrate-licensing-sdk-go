@@ -43,6 +43,56 @@ func TestLoadPublicCertificateFromBytes(t *testing.T) {
 	require.Error(err)
 }
 
+func TestLoadPublicCertificateFromChainBytes(t *testing.T) {
+	t.Parallel()
+
+	require := require.New(t)
+	assert := assert.New(t)
+
+	certs, err := LoadCertificateChainFromBytes(certPEM)
+	require.NoError(err)
+	require.Len(certs, 2)
+
+	cert := certs[0]
+	assert.Equal("Let's Encrypt", cert.Issuer.Organization[0])
+	assert.Equal("licensing-test.omnistrate.dev", cert.DNSNames[0])
+	assert.False(cert.IsCA)
+	assert.NotNil(cert.PublicKey)
+
+	intermediate := certs[1]
+	assert.Equal("R11", intermediate.Subject.CommonName)
+	assert.True(intermediate.IsCA)
+	assert.NotNil(intermediate.PublicKey)
+
+	// Test valid certificate
+	err = VerifyCertificate(cert, "licensing-test.omnistrate.dev", cert.NotBefore.Add(cert.NotAfter.Sub(cert.NotBefore)/2))
+	require.NoError(err)
+
+	// Test expired certificate
+	err = VerifyCertificate(cert, "licensing-test.omnistrate.dev", cert.NotAfter.Add(time.Hour))
+	require.Error(err)
+
+	// Test invalid DNS name
+	err = VerifyCertificate(cert, "licensing.omnistrate.dev.invalid", cert.NotBefore.Add(cert.NotAfter.Sub(cert.NotBefore)/2))
+	require.Error(err)
+}
+
+func TestLoadPublicCertificateChainWithAllIntermediatesFromBytes(t *testing.T) {
+	t.Parallel()
+
+	require := require.New(t)
+	assert := assert.New(t)
+
+	cert, err := LoadCertificateFromBytes(certPEM)
+	require.NoError(err)
+	require.NotNil(cert)
+
+	chain, err := LoadCertificateChainFromBytes(append(append(append(append(intermediatePEM10, intermediatePEM11...), intermediatePEM12...), intermediatePEM13...), rootPEM...))
+	require.NoError(err)
+	require.NotNil(chain)
+	assert.Len(chain, 5)
+}
+
 func TestLoadPrivateCertificateFromBytes(t *testing.T) {
 	t.Parallel()
 

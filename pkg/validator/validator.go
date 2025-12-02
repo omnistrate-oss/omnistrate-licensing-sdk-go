@@ -19,29 +19,43 @@ type ValidatorInterface interface {
 }
 
 type Validator struct {
-	cert *x509.Certificate
+	cert              *x509.Certificate
+	intermediateCerts []*x509.Certificate
 }
 
-func NewValidator(cert *x509.Certificate) ValidatorInterface {
+func NewValidator(cert *x509.Certificate, intermediateCerts []*x509.Certificate) ValidatorInterface {
 	return &Validator{
-		cert: cert,
+		cert:              cert,
+		intermediateCerts: intermediateCerts,
 	}
 }
 
 func NewValidatorFromBytes(certPEM []byte) (ValidatorInterface, error) {
-	cert, err := certificate.LoadCertificateFromBytes(certPEM)
+	certs, err := certificate.LoadCertificateChainFromBytes(certPEM)
 	if err != nil {
 		return nil, err
 	}
-	return NewValidator(cert), nil
+	if len(certs) == 0 {
+		return nil, fmt.Errorf("no certificates found in PEM data")
+	}
+	if len(certs) == 1 {
+		return NewValidator(certs[0], nil), nil
+	}
+	return NewValidator(certs[0], certs[1:]), nil
 }
 
 func NewValidatorFromFiles(certPath string) (ValidatorInterface, error) {
-	cert, err := certificate.LoadCertificate(certPath)
+	certs, err := certificate.LoadCertificateChain(certPath)
 	if err != nil {
 		return nil, err
 	}
-	return NewValidator(cert), nil
+	if len(certs) == 0 {
+		return nil, fmt.Errorf("no certificates found in PEM data")
+	}
+	if len(certs) == 1 {
+		return NewValidator(certs[0], nil), nil
+	}
+	return NewValidator(certs[0], certs[1:]), nil
 }
 
 func NewValidatorFromConfig(config *ValidatorConfig) (ValidatorInterface, error) {
@@ -131,5 +145,5 @@ func (m *Validator) ValidateCertificate(certificateDomain string, currentTime ti
 	}
 
 	// Validate the certificate
-	return certificate.VerifyCertificate(m.cert, certificateDomain, currentTime)
+	return certificate.VerifyCertificateWithIntermediates(m.cert, certificateDomain, currentTime, m.intermediateCerts)
 }
